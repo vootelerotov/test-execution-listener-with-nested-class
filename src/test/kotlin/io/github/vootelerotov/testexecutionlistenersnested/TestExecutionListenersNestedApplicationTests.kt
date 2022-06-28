@@ -20,42 +20,42 @@ import org.springframework.test.context.TestPropertySource
 @TestConstructor(autowireMode = ALL)
 class TestExecutionListenersNestedApplicationTests(private val testComponent: MyTestComponent) {
 
-	@Test
-	fun worksWithoutNestedClassWithNewContext() {
-		assertThat(testComponent.enabled).isTrue
-	}
+  @Test
+  fun worksWithoutNestedClassWithNewContext() {
+    assertThat(testComponent.enabled).isTrue
+  }
 
-	@Nested
-	inner class ClassWithSameContext {
+  @Nested
+  inner class ClassWithSameContext {
 
-		@Test
-		fun noProblemo() {
-			assertThat(testComponent.enabled).isTrue
-		}
-	}
+    @Test
+    fun noProblemo() {
+      assertThat(testComponent.enabled).isTrue
+    }
+  }
 
-	@Nested
-	@TestPropertySource(properties = ["test=true"])
-	inner class ClassWithDifferentContext {
+  @Nested
+  @TestPropertySource(properties = ["test=true"])
+  inner class ClassWithDifferentContext {
 
-		@Test
-		fun problemo() {
-			assertThat(testComponent.enabled).isTrue
-		}
-	}
+    @Test
+    fun problemo() {
+      assertThat(testComponent.enabled).isTrue
+    }
+  }
 
-	@TestComponent
-	class MyTestComponent(var enabled : Boolean = false)
+  @TestComponent
+  class MyTestComponent(var enabled: Boolean = false)
 
-	class MyTestExecutionListener : TestExecutionListener {
+  class MyTestExecutionListener : TestExecutionListener {
 
-		override fun beforeTestMethod(testContext: TestContext) {
-			testContext.applicationContext.getBean(MyTestComponent::class.java).enabled = true
-		}
+    override fun beforeTestMethod(testContext: TestContext) {
+      testContext.applicationContext.getBean(MyTestComponent::class.java).enabled = true
+    }
 
-		override fun afterTestMethod(testContext: TestContext) {
-			testContext.applicationContext.getBean(MyTestComponent::class.java).enabled = false
-		}
-	}
+    override fun afterTestMethod(testContext: TestContext) {
+      testContext.applicationContext.getBean(MyTestComponent::class.java).enabled = false
+    }
+  }
 
 }
